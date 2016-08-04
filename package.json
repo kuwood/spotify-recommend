@@ -1,0 +1,22 @@
+{
+  "name": "spotify-recommend",
+  "version": "1.0.0",
+  "description": "recommends related bands using spotify",
+  "main": "server.js",
+  "repository": {
+      "type" : "git",
+      "url" : "https://github.com/npm/npm.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "spotify"
+  ],
+  "author": "KU",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "unirest": "^0.5.0"
+  }
+}
