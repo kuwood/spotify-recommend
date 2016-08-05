@@ -38,6 +38,9 @@ app.get('/search/:name', function(req, res) {
         //searchReq returns an array as the result.
         var artist = item.artists.items[0];
         //define get from related artists API with id argument
+        if (!artist) {
+            return res.sendStatus(404);
+        }
         var relatedReq = getFromApi('artists/'+artist.id+'/related-artists', {
             id: req.params.id
         });
@@ -67,6 +70,7 @@ app.get('/search/:name', function(req, res) {
         })
 
         relatedReq.on('error', function(code) {
+                    console.log(code);
             res.sendStatus(code);
         });
 
