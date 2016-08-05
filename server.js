@@ -37,16 +37,33 @@ app.get('/search/:name', function(req, res) {
     searchReq.on('end', function(item) {
         //searchReq returns an array as the result.
         var artist = item.artists.items[0];
-        //get from related artists API with id argument
-        var relatedReq = getFromApi('artists/'+artist.id;+'/related-artists', {
+        //define get from related artists API with id argument
+        var relatedReq = getFromApi('artists/'+artist.id+'/related-artists', {
             id: req.params.id
         });
 
         relatedReq.on('end', function(item) {
             //define artists related as the returned related artists array
             artist.related = item.artists;
-            //send back the artists object that now contains related artists
-            res.json(artist)
+            //set counter for forEach statement
+            var countLoop = 0;
+            artist.related.forEach(function(art) {
+                //define GET toptracks endpoint
+                var topTracksReq = getFromApi('artists/'+art.id+'/top-tracks', {
+                    id: req.params.id,
+                    country: 'US'
+                })
+
+                topTracksReq.on('end', function(item) {
+                    art.tracks = item.tracks;
+                    countLoop++;
+                    //wait until forEach is complete to send back artist object
+                    if (countLoop === artist.related.length) {
+                        //send back the artists object that now contains related artists and tracks
+                        res.json(artist);
+                    }
+                })
+            })
         })
 
         relatedReq.on('error', function(code) {
